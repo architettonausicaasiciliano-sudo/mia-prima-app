@@ -1,4 +1,13 @@
-const questions = [
+function saveResult(scoreData) {
+  let history = JSON.parse(localStorage.getItem("assessments")) || [];
+
+  history.push({
+    date: new Date().toISOString(),
+    data: scoreData
+  });
+
+  localStorage.setItem("assessments", JSON.stringify(history));
+}const questions = [
   {
     q: "Water storage",
     options: [
@@ -87,6 +96,7 @@ function showResult() {
   const score = Math.round(total / scores.length);
 
   document.getElementById("score").innerText = score + "%";
+  saveResult(resultData); // 
 
   const breakdown = document.getElementById("breakdown");
   breakdown.innerHTML = `

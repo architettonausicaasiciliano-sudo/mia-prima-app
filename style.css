@@ -1,14 +1,14 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
+  font-family: system-ui, Arial;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color: white;
   margin: 0;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 650px;
   margin: auto;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
 }
 
@@ -21,18 +21,17 @@ body {
 }
 
 button {
-  padding: 12px 20px;
-  margin: 10px;
+  padding: 14px 22px;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
   background: #38bdf8;
-  color: black;
   font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
-  background: #0ea5e9;
+  transform: scale(1.05);
 }
 
 .progress {
@@ -50,6 +49,7 @@ button:hover {
 }
 
 .score {
-  font-size: 50px;
+  font-size: 64px;
   margin: 20px 0;
+  font-weight: bold;
 }
