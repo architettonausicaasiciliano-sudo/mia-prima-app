@@ -1,27 +1,51 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>La mia prima app</title>
-
-  <link rel="stylesheet" href="style.css">
+  <title>Preparedness MVP</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
   <div class="container">
-    <h1>🚀 La mia prima app</h1>
 
-    <button onclick="handleClick()">
-      Cliccami
-    </button>
+    <!-- LANDING -->
+    <div id="landing" class="screen active">
+      <h1>Household Readiness Assessment</h1>
+      <p>Understand your household continuity readiness in minutes.</p>
+      <button onclick="start()">Start assessment</button>
+    </div>
 
-    <p id="output"></p>
+    <!-- QUIZ -->
+    <div id="quiz" class="screen">
+
+      <h2 id="question"></h2>
+
+      <div id="options"></div>
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+
+    </div>
+
+    <!-- RESULT -->
+    <div id="result" class="screen">
+      <h1>Your Preparedness Score</h1>
+
+      <div class="score" id="score">0%</div>
+
+      <div id="breakdown"></div>
+
+      <h3>Top Recommendations</h3>
+      <ul id="recommendations"></ul>
+
+      <button onclick="location.reload()">Restart</button>
+    </div>
+
   </div>
 
-  <script src="script.js"></script>
-
+  <script src="app.js"></script>
 </body>
 </html>
