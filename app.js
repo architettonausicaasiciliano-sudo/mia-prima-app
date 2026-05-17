@@ -50,7 +50,12 @@ let scores = [];
 
 function start() {
   document.getElementById("landing").classList.remove("active");
+  document.getElementById("result").classList.remove("active");
   document.getElementById("quiz").classList.add("active");
+
+  current = 0;
+  scores = [];
+
   loadQuestion();
 }
 
@@ -84,12 +89,10 @@ function select(value) {
 }
 
 function updateProgress() {
-  const percent = ((currentQuestion + 1) / questions.length) * 100;
+  const percent = (current / questions.length) * 100;
 
   document.getElementById("progressBar").style.width = percent + "%";
-
-  document.getElementById("currentStep").innerText =
-    currentQuestion + 1;
+  document.getElementById("currentStep").innerText = current + 1;
 }
 
 function showResult() {
@@ -142,4 +145,6 @@ function showResult() {
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.08);
   text-align: left;
-}
+}function startAssessment() {
+  document.querySelector('.screen').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
