@@ -85,4 +85,58 @@ button:hover {
   transform: translateY(0);
   pointer-events: auto;
   position: relative;
+}.progress-wrapper {
+  margin-top: 30px;
+}
+
+.step-label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}.score-circle {
+  width: 220px;
+  height: 220px;
+  margin: 30px auto;
+  border-radius: 50%;
+  background: conic-gradient(
+    #38bdf8 0%,
+    #22c55e 70%,
+    #334155 70%
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.score {
+  width: 170px;
+  height: 170px;
+  background: #0f172a;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.recommendation-box {
+  margin-top: 30px;
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.recommendation-box ul {
+  padding-left: 20px;
+}
+
+.recommendation-box li {
+  margin: 10px 0;
 }

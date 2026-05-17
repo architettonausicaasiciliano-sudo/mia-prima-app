@@ -24,27 +24,38 @@
 
       <div id="options"></div>
 
-      <div class="progress">
-        <div id="progressBar"></div>
-      </div>
+      <div class="progress-wrapper">
+  <div class="step-label">
+    Step <span id="currentStep">1</span> / 4
+  </div>
+
+  <div class="progress">
+    <div id="progressBar"></div>
+  </div>
+</div>
 
     </div>
 
     <!-- RESULT -->
     <div id="result" class="screen">
-      <h1>Your Preparedness Score</h1>
 
-      <div class="score" id="score">0%</div>
+  <h1>Your Preparedness Score</h1>
 
-      <div id="breakdown"></div>
-
-      <h3>Top Recommendations</h3>
-      <ul id="recommendations"></ul>
-
-      <button onclick="location.reload()">Restart</button>
-    </div>
-
+  <div class="score-circle">
+    <div class="score" id="score">0%</div>
   </div>
+
+  <div id="breakdown"></div>
+
+  <div class="recommendation-box">
+    <h3>Top Priorities</h3>
+
+    <ul id="recommendations"></ul>
+  </div>
+
+  <button onclick="location.reload()">Restart</button>
+
+</div>
 
   <script src="app.js"></script>
 </body>
