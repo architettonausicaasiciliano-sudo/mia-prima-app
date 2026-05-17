@@ -95,18 +95,28 @@ function showResult() {
   const total = scores.reduce((a,b) => a + b, 0);
   const score = Math.round(total / scores.length);
 
+  const resultData = {
+    score,
+    water: scores[0],
+    food: scores[1],
+    energy: scores[2],
+    communication: scores[3]
+  };
+
   document.getElementById("score").innerText = score + "%";
-  saveResult(resultData); // 
+
+  saveResult(resultData);
 
   const breakdown = document.getElementById("breakdown");
   breakdown.innerHTML = `
-    <p>Water: ${scores[0]}%</p>
-    <p>Food: ${scores[1]}%</p>
-    <p>Energy: ${scores[2]}%</p>
-    <p>Communication: ${scores[3]}%</p>
+    <div class="card">💧 Water: ${scores[0]}%</div>
+    <div class="card">🍞 Food: ${scores[1]}%</div>
+    <div class="card">🔋 Energy: ${scores[2]}%</div>
+    <div class="card">📡 Communication: ${scores[3]}%</div>
   `;
 
   const rec = document.getElementById("recommendations");
+  rec.innerHTML = "";
 
   let recommendations = [];
 
@@ -120,4 +130,12 @@ function showResult() {
     li.innerText = r;
     rec.appendChild(li);
   });
+}
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
 }

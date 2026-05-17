@@ -26,13 +26,9 @@ h1, h2 {
 }
 
 .screen {
-  display: none;
   animation: fadeIn 0.4s ease-in-out;
 }
 
-.screen.active {
-  display: block;
-}
 
 button {
   padding: 14px 22px;
@@ -48,6 +44,7 @@ button {
 button:hover {
   transform: scale(1.05);
   background: #0ea5e9;
+  box-shadow: 0 10px 30px rgba(56,189,248,0.3);
 }
 
 .progress {
@@ -74,4 +71,18 @@ button:hover {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}.screen {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  transition: all 0.4s ease;
+}
+
+.screen.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  position: relative;
 }
