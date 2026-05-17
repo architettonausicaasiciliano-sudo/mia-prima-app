@@ -138,13 +138,10 @@ function showResult() {
     rec.appendChild(li);
   });
 }
-.card {
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
-  text-align: left;
-}function startAssessment() {
-  document.querySelector('.screen').classList.remove('active');
-  document.getElementById('quiz').classList.add('active');
+function startAssessment() {
+  document.getElementById("landing").classList.remove("active");
+  document.getElementById("quiz").classList.add("active");
+  current = 0;
+  scores = [];
+  loadQuestion();
+}
