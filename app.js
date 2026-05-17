@@ -84,8 +84,12 @@ function select(value) {
 }
 
 function updateProgress() {
-  const percent = (current / questions.length) * 100;
+  const percent = ((currentQuestion + 1) / questions.length) * 100;
+
   document.getElementById("progressBar").style.width = percent + "%";
+
+  document.getElementById("currentStep").innerText =
+    currentQuestion + 1;
 }
 
 function showResult() {
