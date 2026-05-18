@@ -1,0 +1,27 @@
+{
+  "name": "mia-prima-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architettonausicaasiciliano-sudo/mia-prima-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/architettonausicaasiciliano-sudo/mia-prima-app/issues"
+  },
+  "homepage": "https://github.com/architettonausicaasiciliano-sudo/mia-prima-app#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "stripe": "^22.1.1"
+  }
+}

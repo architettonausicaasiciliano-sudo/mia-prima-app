@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Preparedness MVP</title>
+
   <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
 
   <div class="container">
@@ -25,38 +27,58 @@
       <div id="options"></div>
 
       <div class="progress-wrapper">
-  <div class="step-label">
-    Step <span id="currentStep">1</span> / 4
-  </div>
+        <div class="step-label">
+          Step <span id="currentStep">1</span> / 4
+        </div>
 
-  <div class="progress">
-    <div id="progressBar"></div>
-  </div>
-</div>
+        <div class="progress">
+          <div id="progressBar"></div>
+        </div>
+      </div>
 
     </div>
 
     <!-- RESULT -->
     <div id="result" class="screen">
 
-  <h1>Your Preparedness Score</h1>
+      <!-- PAYWALL (IMPORTANT PART) -->
+      <div id="paywall" class="paywall">
 
-  <div class="score-circle">
-    <div class="score" id="score">0%</div>
+        <h3>Unlock full 7-day action plan</h3>
+        <p>Get your personalized preparedness roadmap</p>
+
+        <!-- STRIPE PAYMENT LINK -->
+        <a
+          href="https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600"
+          target="_blank"
+          class="stripe-button"
+        >
+          Unlock for €0.99
+        </a>
+
+      </div>
+
+      <!-- RESULT CONTENT -->
+      <h1>Your Preparedness Score</h1>
+
+      <div class="score-circle">
+        <div class="score" id="score">0%</div>
+      </div>
+
+      <div id="breakdown"></div>
+
+      <div class="recommendation-box">
+        <h3>Top Priorities</h3>
+        <ul id="recommendations"></ul>
+      </div>
+
+      <button onclick="start()">Restart</button>
+
+    </div>
+
   </div>
-
-  <div id="breakdown"></div>
-
-  <div class="recommendation-box">
-    <h3>Top Priorities</h3>
-
-    <ul id="recommendations"></ul>
-  </div>
-
-  <button onclick="start()">Restart</button>
-
-</div>
 
   <script src="app.js"></script>
+
 </body>
 </html>

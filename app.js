@@ -217,4 +217,20 @@ function startAssessment() {
   );
 
   return plan;
+}function checkUnlock() {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("paid") === "1") {
+    localStorage.setItem("premium", "true");
+  }
+}
+
+checkUnlock();async function buyFullReport() {
+  const res = await fetch("http://localhost:3000/create-checkout-session", {
+    method: "POST",
+  });
+
+  const data = await res.json();
+
+  window.location.href = data.url;
 }
