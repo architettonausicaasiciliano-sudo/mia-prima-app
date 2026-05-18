@@ -111,6 +111,25 @@ function showResult() {
   };
 
   document.getElementById("score").innerText = score + "%";
+  const plan = generateActionPlan(scores);
+
+const planContainer = document.createElement("div");
+planContainer.className = "recommendation-box";
+
+planContainer.innerHTML = "<h3>7-Day Action Plan</h3>";
+
+plan.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <strong>Day ${item.day}</strong><br>
+    ${item.action}<br>
+    <small>Impact: ${item.impact}</small>
+  `;
+  planContainer.appendChild(div);
+});
+
+document.getElementById("result").appendChild(planContainer);
 
   saveResult(resultData);
 
@@ -144,4 +163,58 @@ function startAssessment() {
   current = 0;
   scores = [];
   loadQuestion();
+}function generateActionPlan(scores) {
+  let plan = [];
+
+  if (scores[0] < 50) {
+    plan.push({
+      day: 1,
+      action: "Increase water storage (minimum +20L per person)",
+      impact: "High",
+    });
+  }
+
+  if (scores[1] < 50) {
+    plan.push({
+      day: 2,
+      action: "Stock 5–7 days of non-perishable food",
+      impact: "High",
+    });
+  }
+
+  if (scores[2] < 50) {
+    plan.push({
+      day: 3,
+      action: "Prepare backup energy (power bank, batteries, flashlight)",
+      impact: "High",
+    });
+  }
+
+  if (scores[3] < 50) {
+    plan.push({
+      day: 4,
+      action: "Create communication backup plan (contacts + radio)",
+      impact: "Medium",
+    });
+  }
+
+  plan.push(
+    {
+      day: 5,
+      action: "Print emergency documents & contacts",
+      impact: "Medium",
+    },
+    {
+      day: 6,
+      action: "Prepare emergency kit (basic go-bag)",
+      impact: "High",
+    },
+    {
+      day: 7,
+      action: "Review household readiness & improve weak areas",
+      impact: "Medium",
+    }
+  );
+
+  return plan;
 }

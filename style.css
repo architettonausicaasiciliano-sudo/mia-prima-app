@@ -10,15 +10,15 @@ body {
 }
 
 .container {
-  max-width: 700px;
-  width: 90%;
-  padding: 40px;
+  max-width: 720px;
+  width: 92%;
+  padding: 44px;
   text-align: center;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 24px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.55);
 }
 
 h1, h2 {
@@ -28,20 +28,20 @@ h1, h2 {
 
 
 button {
-  padding: 14px 22px;
-  border-radius: 12px;
+  padding: 14px 20px;
+  border-radius: 14px;
   border: none;
-  background: #38bdf8;
-  font-weight: bold;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s ease;
   margin: 8px;
+  color: #0f172a;
 }
 
 button:hover {
-  transform: scale(1.05);
-  background: #0ea5e9;
-  box-shadow: 0 10px 30px rgba(56,189,248,0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(56,189,248,0.35);
 }
 
 .progress {
@@ -111,15 +111,16 @@ button:hover {
 .score {
   width: 170px;
   height: 170px;
-  background: #0f172a;
+  background: #0b1220;
   border-radius: 50%;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 48px;
-  font-weight: bold;
+  font-size: 46px;
+  font-weight: 700;
+  color: #38bdf8;
 }
 
 .recommendation-box {
@@ -139,9 +140,38 @@ button:hover {
 
 }.card {
   background: rgba(255,255,255,0.05);
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 12px;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
   text-align: left;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateX(4px);
+  background: rgba(56,189,248,0.08);
+
+}
+h1 {
+  font-size: 28px;
+  letter-spacing: 0.3px;
+}
+
+h2 {
+  font-size: 20px;
+  opacity: 0.9;
+}.recommendation-box {
+  margin-top: 30px;
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.recommendation-box h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #38bdf8;
 }
