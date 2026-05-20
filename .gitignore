@@ -1,21 +1,2 @@
-# dependencies
 node_modules/
-
-# env files
 .env
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS files
-.DS_Store
-
-# IDE
-.vscode/
-.idea/
-
-# production builds (se mai li aggiungi dopo)
-dist/
-build/

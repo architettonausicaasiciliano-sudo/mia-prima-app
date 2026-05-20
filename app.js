@@ -1,3 +1,13 @@
+const SUPABASE_URL = "https://yzdmjfpwxqhzfdvoqcai.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
+
+// SUPABASE CLIENT
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+// QUIZ QUESTIONS
 const questions = [
   {
     q: "Water storage",
@@ -38,7 +48,70 @@ const questions = [
 
 let current = 0;
 let scores = [];
+let currentUser = null;
 
+// START APP
+async function init() {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  currentUser = user;
+
+  if (user) {
+    console.log("Logged in:", user.email);
+  } else {
+    console.log("No user");
+  }
+}
+
+init();
+
+// LOGIN
+async function signUp() {
+  const email = prompt("Enter email");
+  const password = prompt("Enter password");
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert("Account created. Check your email.");
+}
+
+// LOGIN
+async function signIn() {
+  const email = prompt("Email");
+  const password = prompt("Password");
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  currentUser = data.user;
+
+  alert("Logged in");
+}
+
+// LOGOUT
+async function logout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// START QUIZ
 function start() {
   document.getElementById("landing").classList.remove("active");
   document.getElementById("result").classList.remove("active");
@@ -50,6 +123,7 @@ function start() {
   loadQuestion();
 }
 
+// LOAD QUESTION
 function loadQuestion() {
   const q = questions[current];
 
@@ -60,16 +134,21 @@ function loadQuestion() {
 
   q.options.forEach(opt => {
     const btn = document.createElement("button");
+
     btn.innerText = opt.text;
+
     btn.onclick = () => select(opt.value);
+
     optionsDiv.appendChild(btn);
   });
 
   updateProgress();
 }
 
+// SELECT ANSWER
 function select(value) {
   scores.push(value);
+
   current++;
 
   if (current < questions.length) {
@@ -79,30 +158,62 @@ function select(value) {
   }
 }
 
+// UPDATE BAR
 function updateProgress() {
   document.getElementById("progressBar").style.width =
     (current / questions.length) * 100 + "%";
 
-  document.getElementById("currentStep").innerText = current + 1;
+  document.getElementById("currentStep").innerText =
+    current + 1;
 }
 
-function showResult() {
+// SHOW RESULT
+async function showResult() {
   document.getElementById("quiz").classList.remove("active");
+
   document.getElementById("result").classList.add("active");
 
   const total = scores.reduce((a, b) => a + b, 0);
+
   const score = Math.round(total / scores.length);
 
-  document.getElementById("score").innerText = score + "%";
+  document.getElementById("score").innerText =
+    score + "%";
+
+  // SAVE TO SUPABASE
+  await saveAssessment(score);
 
   const plan = generateActionPlan(scores);
 
   renderBreakdown();
+
   renderPlan(plan);
 }
 
+// SAVE RESULT
+async function saveAssessment(score) {
+  if (!currentUser) return;
+
+  const { error } = await supabase
+    .from("assessments")
+    .insert([
+      {
+        user_email: currentUser.email,
+        preparedness_score: score
+      }
+    ]);
+
+  if (error) {
+    console.error(error);
+  } else {
+    console.log("Saved");
+  }
+}
+
+// BREAKDOWN
 function renderBreakdown() {
-  const breakdown = document.getElementById("breakdown");
+  const breakdown =
+    document.getElementById("breakdown");
 
   breakdown.innerHTML = `
     <div class="card">💧 Water: ${scores[0]}%</div>
@@ -112,37 +223,48 @@ function renderBreakdown() {
   `;
 }
 
+// PLAN
 function renderPlan(plan) {
   const container = document.getElementById("plan");
+
   container.innerHTML = "";
 
-  const isPremium = localStorage.getItem("premium") === "true";
+  const freeDays =
+    plan.filter(p => p.day <= 2);
 
-  const freeDays = plan.filter(p => p.day <= 2);
-  const premiumDays = plan.filter(p => p.day > 2);
+  const premiumDays =
+    plan.filter(p => p.day > 2);
 
-  // FREE CONTENT
   freeDays.forEach(renderCard);
 
-  // LOCKED CONTENT
-  if (!isPremium) {
-    const lock = document.createElement("div");
-    lock.className = "card";
-    lock.innerHTML = `
-      🔒 Unlock full 7-day plan<br><br>
-      <button onclick="buyFullReport()">Unlock €0.99/month</button>
-    `;
-    container.appendChild(lock);
-  } else {
-    premiumDays.forEach(renderCard);
-  }
+  const lock = document.createElement("div");
+
+  lock.className = "card";
+
+  lock.innerHTML = `
+    🔒 Unlock full 7-day plan<br><br>
+
+    <a
+      href="https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600"
+      target="_blank"
+      class="stripe-button"
+    >
+      Unlock Premium
+    </a>
+  `;
+
+  container.appendChild(lock);
 }
 
+// CARD
 function renderCard(item) {
-  const container = document.getElementById("plan");
+  const container =
+    document.getElementById("plan");
 
   const div = document.createElement("div");
+
   div.className = "card";
+
   div.innerHTML = `
     <strong>Day ${item.day}</strong><br>
     ${item.action}<br>
@@ -152,33 +274,55 @@ function renderCard(item) {
   container.appendChild(div);
 }
 
+// ACTION PLAN
 function generateActionPlan(scores) {
   let plan = [];
 
-  if (scores[0] < 50) plan.push({ day: 1, action: "Increase water storage", impact: "High" });
-  if (scores[1] < 50) plan.push({ day: 2, action: "Stock food supplies", impact: "High" });
-  if (scores[2] < 50) plan.push({ day: 3, action: "Backup energy sources", impact: "High" });
-  if (scores[3] < 50) plan.push({ day: 4, action: "Communication plan", impact: "Medium" });
+  if (scores[0] < 50)
+    plan.push({
+      day: 1,
+      action: "Increase water storage",
+      impact: "High"
+    });
+
+  if (scores[1] < 50)
+    plan.push({
+      day: 2,
+      action: "Stock food supplies",
+      impact: "High"
+    });
+
+  if (scores[2] < 50)
+    plan.push({
+      day: 3,
+      action: "Backup energy sources",
+      impact: "High"
+    });
+
+  if (scores[3] < 50)
+    plan.push({
+      day: 4,
+      action: "Communication plan",
+      impact: "Medium"
+    });
 
   plan.push(
-    { day: 5, action: "Print documents", impact: "Medium" },
-    { day: 6, action: "Emergency kit", impact: "High" },
-    { day: 7, action: "Review plan", impact: "Medium" }
+    {
+      day: 5,
+      action: "Print documents",
+      impact: "Medium"
+    },
+    {
+      day: 6,
+      action: "Emergency kit",
+      impact: "High"
+    },
+    {
+      day: 7,
+      action: "Review plan",
+      impact: "Medium"
+    }
   );
 
   return plan;
-}
-
-async function buyFullReport() {
-  const res = await fetch("http://localhost:3000/create-checkout-session", {
-    method: "POST"
-  });
-
-  const data = await res.json();
-  window.location.href = data.url;
-}
-
-// unlock MVP (per test)
-function unlockPremium() {
-  localStorage.setItem("premium", "true");
 }
