@@ -10,94 +10,98 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- LANDING -->
-    <div id="landing" class="screen active">
-      <h1>Household Readiness Assessment</h1>
-      <p>Understand your household continuity readiness in minutes.</p>
-      <button onclick="start()">Start assessment</button>
-    </div>
-
-    <!-- QUIZ -->
-    <div id="quiz" class="screen">
-
-      <h2 id="question"></h2>
-
-      <div id="options"></div>
-
-      <div class="progress-wrapper">
-        <div class="step-label">
-          Step <span id="currentStep">1</span> / 4
-        </div>
-
-        <div class="progress">
-          <div id="progressBar"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RESULT -->
-    <div id="result" class="screen">
-
-      <!-- PAYWALL (IMPORTANT PART) -->
-      <div id="paywall" class="paywall">
-
-        <h3>Unlock full 7-day action plan</h3>
-        <p>Get your personalized preparedness roadmap</p>
-
-        <!-- STRIPE PAYMENT LINK -->
-        <a
-          href="https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600"
-          target="_blank"
-          class="stripe-button"
-        >
-          Unlock for €0.99
-        </a>
-
-      </div>
-
-      <!-- RESULT CONTENT -->
-      <h1>Your Preparedness Score</h1>
-
-      <div class="score-circle">
-        <div class="score" id="score">0%</div>
-      </div>
-
-      <div id="premiumContent" class="locked-content">
-
-  <div class="blur-overlay">
-    <div class="unlock-box">
-      <h3>Premium Preparedness Plan</h3>
-      <p>Unlock your full breakdown and 7-day action roadmap.</p>
-
-      <a
-        href="https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600"
-        target="_blank"
-        class="stripe-button"
-      >
-        Unlock for €0.99
-      </a>
-    </div>
+  <!-- LANDING -->
+  <div id="landing" class="screen active">
+    <h1>Household Readiness Assessment</h1>
+    <p>Understand your household resilience in minutes.</p>
+    <button onclick="start()">Start assessment</button>
   </div>
 
-  <div id="breakdown"></div>
+  <!-- QUIZ -->
+  <div id="quiz" class="screen">
 
-  <div class="recommendation-box">
-    <h3>Top Priorities</h3>
-    <ul id="recommendations"></ul>
+    <h2 id="question"></h2>
+    <div id="options"></div>
+
+    <div class="progress-wrapper">
+      <div class="step-label">
+        Step <span id="currentStep">1</span> / 4
+      </div>
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="screen">
+
+    <h1>Your Preparedness Score</h1>
+
+    <div class="score-circle">
+      <div class="score" id="score">0%</div>
+    </div>
+
+    <!-- PAYWALL + CONTENT -->
+    <div id="premiumContent" class="locked-content">
+
+      <div class="blur-overlay">
+
+        <div class="unlock-box">
+
+          <h3>Unlock your 7-day survival plan</h3>
+
+          <p class="subtext">
+            Based on your answers, your household has critical preparedness gaps.
+          </p>
+
+          <div class="value-box">
+            ✔ Personalized 7-day action roadmap<br>
+            ✔ Priority fixes based on weak points<br>
+            ✔ Emergency readiness breakdown
+          </div>
+
+          <div class="price-tag">€0.99 / month</div>
+
+          <a
+            href="https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600"
+            target="_blank"
+            class="stripe-button"
+          >
+            Unlock full plan now
+          </a>
+
+          <p class="micro-text">
+            Cancel anytime • Instant access after payment
+          </p>
+
+        </div>
+
+      </div>
+
+      <div id="breakdown"></div>
+
+      <div class="recommendation-box">
+        <h3>Top Priorities</h3>
+        <ul id="recommendations"></ul>
+      </div>
+
+      <!-- 7-DAY PLAN (GENERATO DA JS) -->
+      <div id="plan"></div>
+
+    </div>
+
+    <button onclick="start()">Restart</button>
+
   </div>
 
 </div>
 
-      <button onclick="start()">Restart</button>
-
-    </div>
-
-  </div>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>

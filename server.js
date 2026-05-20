@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-dotenv.config(); // 👈 DEVE essere PRIMA di usare process.env
+dotenv.config();
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -11,47 +11,34 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Health check (utile per debug)
 app.get("/", (req, res) => {
-  res.send("Server Stripe attivo");
+  res.send("Stripe server running");
 });
 
 app.post("/create-checkout-session", async (req, res) => {
   try {
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(500).json({
-        error: "Missing Stripe secret key in .env",
-      });
-    }
-
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
+      mode: "subscription",
+
       line_items: [
         {
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: "Full Preparedness Report",
-            },
-            unit_amount: 99, // €0.99
-          },
-          quantity: 1,
-        },
+          price: "price_1TYTaOHyr3eYjbnKkAMSxY5A", // <-- METTI QUI IL TUO STRIPE PRICE ID
+          quantity: 1
+        }
       ],
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+
+      success_url: "http://localhost:3000/success?paid=1",
+      cancel_url: "http://localhost:3000"
     });
 
     res.json({ url: session.url });
+
   } catch (err) {
-    console.error("Stripe error:", err);
+    console.error(err);
     res.status(500).json({ error: "Stripe error" });
   }
 });
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
 });

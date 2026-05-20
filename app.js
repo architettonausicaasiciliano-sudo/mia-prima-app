@@ -1,13 +1,4 @@
-function saveResult(scoreData) {
-  let history = JSON.parse(localStorage.getItem("assessments")) || [];
-
-  history.push({
-    date: new Date().toISOString(),
-    data: scoreData
-  });
-
-  localStorage.setItem("assessments", JSON.stringify(history));
-}const questions = [
+const questions = [
   {
     q: "Water storage",
     options: [
@@ -30,9 +21,9 @@ function saveResult(scoreData) {
     q: "Emergency power",
     options: [
       { text: "None", value: 0 },
-      { text: "Power bank only", value: 50 },
+      { text: "Power bank", value: 50 },
       { text: "Backup batteries", value: 75 },
-      { text: "Generator / full backup", value: 100 }
+      { text: "Generator", value: 100 }
     ]
   },
   {
@@ -40,7 +31,7 @@ function saveResult(scoreData) {
     options: [
       { text: "No plan", value: 0 },
       { text: "Phone only", value: 50 },
-      { text: "Backup radio / contacts", value: 100 }
+      { text: "Backup contacts", value: 100 }
     ]
   }
 ];
@@ -89,9 +80,9 @@ function select(value) {
 }
 
 function updateProgress() {
-  const percent = (current / questions.length) * 100;
+  document.getElementById("progressBar").style.width =
+    (current / questions.length) * 100 + "%";
 
-  document.getElementById("progressBar").style.width = percent + "%";
   document.getElementById("currentStep").innerText = current + 1;
 }
 
@@ -99,138 +90,95 @@ function showResult() {
   document.getElementById("quiz").classList.remove("active");
   document.getElementById("result").classList.add("active");
 
-  const total = scores.reduce((a,b) => a + b, 0);
+  const total = scores.reduce((a, b) => a + b, 0);
   const score = Math.round(total / scores.length);
 
-  const resultData = {
-    score,
-    water: scores[0],
-    food: scores[1],
-    energy: scores[2],
-    communication: scores[3]
-  };
-
   document.getElementById("score").innerText = score + "%";
+
   const plan = generateActionPlan(scores);
 
-const planContainer = document.createElement("div");
-planContainer.className = "recommendation-box";
+  renderBreakdown();
+  renderPlan(plan);
+}
 
-planContainer.innerHTML = "<h3>7-Day Action Plan</h3>";
-
-plan.forEach(item => {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
-    <strong>Day ${item.day}</strong><br>
-    ${item.action}<br>
-    <small>Impact: ${item.impact}</small>
-  `;
-  planContainer.appendChild(div);
-});
-
-document.getElementById("result").appendChild(planContainer);
-
-  saveResult(resultData);
-
+function renderBreakdown() {
   const breakdown = document.getElementById("breakdown");
+
   breakdown.innerHTML = `
     <div class="card">💧 Water: ${scores[0]}%</div>
     <div class="card">🍞 Food: ${scores[1]}%</div>
     <div class="card">🔋 Energy: ${scores[2]}%</div>
     <div class="card">📡 Communication: ${scores[3]}%</div>
   `;
-
-  const rec = document.getElementById("recommendations");
-  rec.innerHTML = "";
-
-  let recommendations = [];
-
-  if (scores[0] < 50) recommendations.push("Increase water storage");
-  if (scores[1] < 50) recommendations.push("Store more food supplies");
-  if (scores[2] < 50) recommendations.push("Prepare backup power sources");
-  if (scores[3] < 50) recommendations.push("Improve communication backup plan");
-
-  recommendations.forEach(r => {
-    const li = document.createElement("li");
-    li.innerText = r;
-    rec.appendChild(li);
-  });
 }
-function startAssessment() {
-  document.getElementById("landing").classList.remove("active");
-  document.getElementById("quiz").classList.add("active");
-  current = 0;
-  scores = [];
-  loadQuestion();
-}function generateActionPlan(scores) {
+
+function renderPlan(plan) {
+  const container = document.getElementById("plan");
+  container.innerHTML = "";
+
+  const isPremium = localStorage.getItem("premium") === "true";
+
+  const freeDays = plan.filter(p => p.day <= 2);
+  const premiumDays = plan.filter(p => p.day > 2);
+
+  // FREE CONTENT
+  freeDays.forEach(renderCard);
+
+  // LOCKED CONTENT
+  if (!isPremium) {
+    const lock = document.createElement("div");
+    lock.className = "card";
+    lock.innerHTML = `
+      🔒 Unlock full 7-day plan<br><br>
+      <button onclick="buyFullReport()">Unlock €0.99/month</button>
+    `;
+    container.appendChild(lock);
+  } else {
+    premiumDays.forEach(renderCard);
+  }
+}
+
+function renderCard(item) {
+  const container = document.getElementById("plan");
+
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <strong>Day ${item.day}</strong><br>
+    ${item.action}<br>
+    <small>${item.impact}</small>
+  `;
+
+  container.appendChild(div);
+}
+
+function generateActionPlan(scores) {
   let plan = [];
 
-  if (scores[0] < 50) {
-    plan.push({
-      day: 1,
-      action: "Increase water storage (minimum +20L per person)",
-      impact: "High",
-    });
-  }
-
-  if (scores[1] < 50) {
-    plan.push({
-      day: 2,
-      action: "Stock 5–7 days of non-perishable food",
-      impact: "High",
-    });
-  }
-
-  if (scores[2] < 50) {
-    plan.push({
-      day: 3,
-      action: "Prepare backup energy (power bank, batteries, flashlight)",
-      impact: "High",
-    });
-  }
-
-  if (scores[3] < 50) {
-    plan.push({
-      day: 4,
-      action: "Create communication backup plan (contacts + radio)",
-      impact: "Medium",
-    });
-  }
+  if (scores[0] < 50) plan.push({ day: 1, action: "Increase water storage", impact: "High" });
+  if (scores[1] < 50) plan.push({ day: 2, action: "Stock food supplies", impact: "High" });
+  if (scores[2] < 50) plan.push({ day: 3, action: "Backup energy sources", impact: "High" });
+  if (scores[3] < 50) plan.push({ day: 4, action: "Communication plan", impact: "Medium" });
 
   plan.push(
-    {
-      day: 5,
-      action: "Print emergency documents & contacts",
-      impact: "Medium",
-    },
-    {
-      day: 6,
-      action: "Prepare emergency kit (basic go-bag)",
-      impact: "High",
-    },
-    {
-      day: 7,
-      action: "Review household readiness & improve weak areas",
-      impact: "Medium",
-    }
+    { day: 5, action: "Print documents", impact: "Medium" },
+    { day: 6, action: "Emergency kit", impact: "High" },
+    { day: 7, action: "Review plan", impact: "Medium" }
   );
 
   return plan;
-}function checkUnlock() {
-  const params = new URLSearchParams(window.location.search);
-
-  if (params.get("paid") === "1") {
-    localStorage.setItem("premium", "true");
-  }
 }
 
-checkUnlock();async function buyFullReport() {
+async function buyFullReport() {
   const res = await fetch("http://localhost:3000/create-checkout-session", {
-    method: "POST",
+    method: "POST"
   });
 
   const data = await res.json();
-
   window.location.href = data.url;
+}
+
+// unlock MVP (per test)
+function unlockPremium() {
+  localStorage.setItem("premium", "true");
 }
