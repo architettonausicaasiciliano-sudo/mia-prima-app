@@ -1,11 +1,11 @@
 const SUPABASE_URL = "https://yzdmjfpwxqhzfdvoqcai.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
 
 // SUPABASE CLIENT
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
-);
+); console.log("Supabase connected");
 
 // QUIZ QUESTIONS
 const questions = [
@@ -66,6 +66,10 @@ async function init() {
 }
 
 init();
+if (!window.supabase) {
+  console.error("Supabase library not loaded");
+  return;
+}
 
 // LOGIN
 async function signUp() {
@@ -325,4 +329,9 @@ function generateActionPlan(scores) {
   );
 
   return plan;
+}function buyFullReport() {
+  window.open(
+    "https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600",
+    "_blank"
+  );
 }
