@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MySafeHaven</title>
+  <title>MySafeHaven - Preparedness Assessment</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -16,8 +16,12 @@
   <div id="landing" class="screen active">
     <h1>72h Household Resilience Check</h1>
 
-    <p>Get your personalized emergency readiness score.</p>
+    <p>
+      Understand your vulnerability in a major disruption
+      and get a personalized action plan.
+    </p>
 
+    <!-- IMPORTANT: must match function name in app.js -->
     <button onclick="startQuiz()">Start Assessment</button>
   </div>
 
@@ -32,7 +36,9 @@
       <div id="progressBar"></div>
     </div>
 
-    <p>Step <span id="currentStep">1</span> / 4</p>
+    <p>
+      Step <span id="currentStep">1</span> / 4
+    </p>
 
   </div>
 
@@ -45,8 +51,26 @@
       <div class="score" id="score">0%</div>
     </div>
 
+    <!-- BREAKDOWN -->
     <div id="breakdown"></div>
+
+    <!-- PLAN -->
     <div id="plan"></div>
+
+    <!-- PAYWALL (static for now) -->
+    <div class="paywall">
+
+      <h3>🚨 Full 7-Day Emergency Plan Locked</h3>
+
+      <p>
+        Unlock your full personalized preparedness roadmap.
+      </p>
+
+      <button onclick="unlockPremium()" class="cta">
+        Unlock Full Plan
+      </button>
+
+    </div>
 
     <button onclick="startQuiz()">Restart</button>
 
@@ -54,7 +78,10 @@
 
 </div>
 
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- APP -->
 <script src="app.js"></script>
 
 </body>

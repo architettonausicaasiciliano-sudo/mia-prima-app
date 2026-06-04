@@ -1,8 +1,8 @@
 // =========================
-// SUPABASE INIT (ONCE ONLY)
+// SUPABASE INIT (ONLY ONCE)
 // =========================
 const SUPABASE_URL = "https://yzdmjfpwxqhzfdvoqcai.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE";
+const SUPABASE_ANON_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
 
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
@@ -10,7 +10,14 @@ const supabase = window.supabase.createClient(
 );
 
 // =========================
-// QUIZ DATA
+// STATE
+// =========================
+let current = 0;
+let scores = [];
+let currentUser = null;
+
+// =========================
+// QUESTIONS
 // =========================
 const questions = [
   {
@@ -19,7 +26,7 @@ const questions = [
       { text: "Less than 5L", value: 0 },
       { text: "5–20L", value: 25 },
       { text: "20–50L", value: 50 },
-      { text: "50L+", value: 100 }
+      { text: "More than 50L", value: 100 }
     ]
   },
   {
@@ -41,7 +48,7 @@ const questions = [
     ]
   },
   {
-    q: "Communication",
+    q: "Communication readiness",
     options: [
       { text: "No plan", value: 0 },
       { text: "Phone only", value: 50 },
@@ -51,17 +58,20 @@ const questions = [
 ];
 
 // =========================
-// STATE
+// INIT
 // =========================
-let current = 0;
-let scores = [];
+async function init() {
+  const { data } = await supabase.auth.getUser();
+  currentUser = data?.user || null;
+}
+
+init();
 
 // =========================
-// START QUIZ
+// UI FLOW
 // =========================
 function startQuiz() {
   document.getElementById("landing").classList.remove("active");
-  document.getElementById("result").classList.remove("active");
   document.getElementById("quiz").classList.add("active");
 
   current = 0;
@@ -71,7 +81,7 @@ function startQuiz() {
 }
 
 // =========================
-// LOAD QUESTION
+// QUIZ LOGIC
 // =========================
 function loadQuestion() {
   const q = questions[current];
@@ -88,15 +98,12 @@ function loadQuestion() {
     optionsDiv.appendChild(btn);
   });
 
+  document.getElementById("currentStep").innerText = current + 1;
+
   document.getElementById("progressBar").style.width =
     (current / questions.length) * 100 + "%";
-
-  document.getElementById("currentStep").innerText = current + 1;
 }
 
-// =========================
-// SELECT ANSWER
-// =========================
 function select(value) {
   scores.push(value);
   current++;
@@ -109,7 +116,7 @@ function select(value) {
 }
 
 // =========================
-// FINISH QUIZ
+// RESULT
 // =========================
 async function finishQuiz() {
   const total = scores.reduce((a, b) => a + b, 0);
@@ -123,20 +130,18 @@ async function finishQuiz() {
   renderBreakdown();
   renderPlan();
 
-  // SAVE TO SUPABASE (SAFE)
-  try {
+  if (currentUser) {
     await supabase.from("assessments").insert([
       {
+        user_email: currentUser.email,
         preparedness_score: score
       }
     ]);
-  } catch (err) {
-    console.log("DB error", err);
   }
 }
 
 // =========================
-// BREAKDOWN
+// UI RESULT
 // =========================
 function renderBreakdown() {
   document.getElementById("breakdown").innerHTML = `
@@ -147,24 +152,12 @@ function renderBreakdown() {
   `;
 }
 
-// =========================
-// PLAN (MVP MONETIZATION)
-// =========================
 function renderPlan() {
   document.getElementById("plan").innerHTML = `
-    <div class="card">Day 1: Improve water storage</div>
+    <div class="card">Day 1: Increase water storage</div>
     <div class="card">Day 2: Stock food supplies</div>
-
-    <div class="card" style="margin-top:20px; border:1px solid #38bdf8;">
-      🔒 Full 7-day plan locked<br><br>
-      <button onclick="goPremium()">Unlock Premium</button>
-    </div>
+    <div class="card">Day 3: Backup energy sources</div>
+    <div class="card">Day 4: Communication plan</div>
+    <div class="card">🔒 Premium: full 7-day plan</div>
   `;
-}
-
-// =========================
-// MONETIZATION HOOK
-// =========================
-function goPremium() {
-  window.location.href = "https://buy.stripe.com/test_XXXXXXXX";
 }
