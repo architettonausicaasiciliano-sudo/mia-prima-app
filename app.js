@@ -1,14 +1,17 @@
+// =========================
+// SUPABASE INIT (ONCE ONLY)
+// =========================
 const SUPABASE_URL = "https://yzdmjfpwxqhzfdvoqcai.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE";
 
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
-let current = 0;
-let scores = [];
-
+// =========================
+// QUIZ DATA
+// =========================
 const questions = [
   {
     q: "Water storage",
@@ -20,34 +23,45 @@ const questions = [
     ]
   },
   {
-    q: "Food supply",
+    q: "Food availability",
     options: [
-      { text: "1 day", value: 0 },
-      { text: "2–3 days", value: 25 },
-      { text: "5 days", value: 50 },
-      { text: "7+ days", value: 100 }
+      { text: "Less than 1 day", value: 0 },
+      { text: "1–2 days", value: 25 },
+      { text: "3–5 days", value: 50 },
+      { text: "1 week+", value: 100 }
     ]
   },
   {
-    q: "Energy backup",
+    q: "Emergency power",
     options: [
       { text: "None", value: 0 },
       { text: "Power bank", value: 50 },
+      { text: "Backup batteries", value: 75 },
       { text: "Generator", value: 100 }
     ]
   },
   {
     q: "Communication",
     options: [
-      { text: "None", value: 0 },
-      { text: "Basic plan", value: 50 },
-      { text: "Full plan", value: 100 }
+      { text: "No plan", value: 0 },
+      { text: "Phone only", value: 50 },
+      { text: "Backup contacts", value: 100 }
     ]
   }
 ];
 
+// =========================
+// STATE
+// =========================
+let current = 0;
+let scores = [];
+
+// =========================
+// START QUIZ
+// =========================
 function startQuiz() {
   document.getElementById("landing").classList.remove("active");
+  document.getElementById("result").classList.remove("active");
   document.getElementById("quiz").classList.add("active");
 
   current = 0;
@@ -56,6 +70,9 @@ function startQuiz() {
   loadQuestion();
 }
 
+// =========================
+// LOAD QUESTION
+// =========================
 function loadQuestion() {
   const q = questions[current];
 
@@ -66,28 +83,34 @@ function loadQuestion() {
 
   q.options.forEach(opt => {
     const btn = document.createElement("button");
-
     btn.innerText = opt.text;
-
-    btn.onclick = () => {
-      scores.push(opt.value);
-      current++;
-
-      if (current < questions.length) {
-        loadQuestion();
-      } else {
-        finishQuiz();
-      }
-    };
-
+    btn.onclick = () => select(opt.value);
     optionsDiv.appendChild(btn);
   });
 
-  document.getElementById("currentStep").innerText = current + 1;
   document.getElementById("progressBar").style.width =
     (current / questions.length) * 100 + "%";
+
+  document.getElementById("currentStep").innerText = current + 1;
 }
 
+// =========================
+// SELECT ANSWER
+// =========================
+function select(value) {
+  scores.push(value);
+  current++;
+
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+// =========================
+// FINISH QUIZ
+// =========================
 async function finishQuiz() {
   const total = scores.reduce((a, b) => a + b, 0);
   const score = Math.round(total / scores.length);
@@ -97,12 +120,51 @@ async function finishQuiz() {
 
   document.getElementById("score").innerText = score + "%";
 
-  await supabase.from("assessments").insert([
-    { preparedness_score: score }
-  ]);
+  renderBreakdown();
+  renderPlan();
+
+  // SAVE TO SUPABASE (SAFE)
+  try {
+    await supabase.from("assessments").insert([
+      {
+        preparedness_score: score
+      }
+    ]);
+  } catch (err) {
+    console.log("DB error", err);
+  }
 }
 
-function unlockPremium() {
-  window.location.href =
-    "https://buy.stripe.com/test_00w3cv0SQaYa70uczm9R600";
+// =========================
+// BREAKDOWN
+// =========================
+function renderBreakdown() {
+  document.getElementById("breakdown").innerHTML = `
+    <div class="card">💧 Water: ${scores[0]}%</div>
+    <div class="card">🍞 Food: ${scores[1]}%</div>
+    <div class="card">🔋 Energy: ${scores[2]}%</div>
+    <div class="card">📡 Communication: ${scores[3]}%</div>
+  `;
+}
+
+// =========================
+// PLAN (MVP MONETIZATION)
+// =========================
+function renderPlan() {
+  document.getElementById("plan").innerHTML = `
+    <div class="card">Day 1: Improve water storage</div>
+    <div class="card">Day 2: Stock food supplies</div>
+
+    <div class="card" style="margin-top:20px; border:1px solid #38bdf8;">
+      🔒 Full 7-day plan locked<br><br>
+      <button onclick="goPremium()">Unlock Premium</button>
+    </div>
+  `;
+}
+
+// =========================
+// MONETIZATION HOOK
+// =========================
+function goPremium() {
+  window.location.href = "https://buy.stripe.com/test_XXXXXXXX";
 }
