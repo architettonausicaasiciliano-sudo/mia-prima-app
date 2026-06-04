@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MySafeHaven - Preparedness Assessment</title>
 
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -21,8 +21,8 @@
       and get a personalized action plan.
     </p>
 
-    <!-- IMPORTANT: must match function name in app.js -->
-    <button onclick="startQuiz()">Start Assessment</button>
+    <!-- NO INLINE ONCLICK (IMPORTANT) -->
+    <button id="startBtn">Start Assessment</button>
   </div>
 
   <!-- QUIZ -->
@@ -51,38 +51,29 @@
       <div class="score" id="score">0%</div>
     </div>
 
-    <!-- BREAKDOWN -->
     <div id="breakdown"></div>
-
-    <!-- PLAN -->
     <div id="plan"></div>
 
-    <!-- PAYWALL (static for now) -->
     <div class="paywall">
-
       <h3>🚨 Full 7-Day Emergency Plan Locked</h3>
 
       <p>
         Unlock your full personalized preparedness roadmap.
       </p>
 
-      <button onclick="unlockPremium()" class="cta">
+      <button id="unlockBtn" class="cta">
         Unlock Full Plan
       </button>
-
     </div>
 
-    <button onclick="startQuiz()">Restart</button>
+    <button id="restartBtn">Restart</button>
 
   </div>
 
 </div>
 
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- APP -->
-<script src="app.js"></script>
+<!-- ONLY YOUR APP -->
+<script src="app.js?v=3"></script>
 
 </body>
 </html>

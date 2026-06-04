@@ -1,24 +1,9 @@
-// =========================
-// SUPABASE INIT (ONLY ONCE)
-// =========================
-const SUPABASE_URL = "https://yzdmjfpwxqhzfdvoqcai.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_TEeZZG6M_RWYvv7jkFe5pQb1H2q";
+const API_URL = ""; // se backend separato metti URL Vercel/Render
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+/* -------------------------
+   QUIZ DATA
+-------------------------- */
 
-// =========================
-// STATE
-// =========================
-let current = 0;
-let scores = [];
-let currentUser = null;
-
-// =========================
-// QUESTIONS
-// =========================
 const questions = [
   {
     q: "Water storage",
@@ -57,21 +42,20 @@ const questions = [
   }
 ];
 
-// =========================
-// INIT
-// =========================
-async function init() {
-  const { data } = await supabase.auth.getUser();
-  currentUser = data?.user || null;
-}
+/* -------------------------
+   STATE
+-------------------------- */
 
-init();
+let current = 0;
+let scores = [];
 
-// =========================
-// UI FLOW
-// =========================
+/* -------------------------
+   START
+-------------------------- */
+
 function startQuiz() {
   document.getElementById("landing").classList.remove("active");
+  document.getElementById("result").classList.remove("active");
   document.getElementById("quiz").classList.add("active");
 
   current = 0;
@@ -80,9 +64,10 @@ function startQuiz() {
   loadQuestion();
 }
 
-// =========================
-// QUIZ LOGIC
-// =========================
+/* -------------------------
+   QUESTIONS
+-------------------------- */
+
 function loadQuestion() {
   const q = questions[current];
 
@@ -104,6 +89,10 @@ function loadQuestion() {
     (current / questions.length) * 100 + "%";
 }
 
+/* -------------------------
+   SELECT ANSWER
+-------------------------- */
+
 function select(value) {
   scores.push(value);
   current++;
@@ -115,10 +104,11 @@ function select(value) {
   }
 }
 
-// =========================
-// RESULT
-// =========================
-async function finishQuiz() {
+/* -------------------------
+   RESULT
+-------------------------- */
+
+function finishQuiz() {
   const total = scores.reduce((a, b) => a + b, 0);
   const score = Math.round(total / scores.length);
 
@@ -129,22 +119,16 @@ async function finishQuiz() {
 
   renderBreakdown();
   renderPlan();
-
-  if (currentUser) {
-    await supabase.from("assessments").insert([
-      {
-        user_email: currentUser.email,
-        preparedness_score: score
-      }
-    ]);
-  }
 }
 
-// =========================
-// UI RESULT
-// =========================
+/* -------------------------
+   BREAKDOWN
+-------------------------- */
+
 function renderBreakdown() {
-  document.getElementById("breakdown").innerHTML = `
+  const el = document.getElementById("breakdown");
+
+  el.innerHTML = `
     <div class="card">💧 Water: ${scores[0]}%</div>
     <div class="card">🍞 Food: ${scores[1]}%</div>
     <div class="card">🔋 Energy: ${scores[2]}%</div>
@@ -152,12 +136,36 @@ function renderBreakdown() {
   `;
 }
 
+/* -------------------------
+   PLAN
+-------------------------- */
+
 function renderPlan() {
-  document.getElementById("plan").innerHTML = `
-    <div class="card">Day 1: Increase water storage</div>
-    <div class="card">Day 2: Stock food supplies</div>
-    <div class="card">Day 3: Backup energy sources</div>
-    <div class="card">Day 4: Communication plan</div>
-    <div class="card">🔒 Premium: full 7-day plan</div>
-  `;
+  const el = document.getElementById("plan");
+
+  const plan = [
+    { day: 1, action: "Increase water storage", impact: "High" },
+    { day: 2, action: "Stock food supplies", impact: "High" },
+    { day: 3, action: "Backup energy sources", impact: "High" },
+    { day: 4, action: "Communication plan", impact: "Medium" },
+    { day: 5, action: "Print documents", impact: "Medium" },
+    { day: 6, action: "Emergency kit", impact: "High" },
+    { day: 7, action: "Review plan", impact: "Medium" }
+  ];
+
+  el.innerHTML = plan.map(p => `
+    <div class="card">
+      <strong>Day ${p.day}</strong><br/>
+      ${p.action}<br/>
+      <small>${p.impact}</small>
+    </div>
+  `).join("");
+}
+
+/* -------------------------
+   MONETIZATION HOOK
+-------------------------- */
+
+function unlockPremium() {
+  alert("Stripe integration next step (ready to plug)");
 }
