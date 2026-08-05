@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MySafeHaven - Checkout</title>
+
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6f8;
+      color: #111827;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px 14px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 470px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 24px 22px;
+      box-shadow: 0 8px 35px rgba(0,0,0,0.10);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 8px 0 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.45;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .order-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin: 9px 0;
+      font-size: 14px;
+    }
+
+    .old-price {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+
+    .discount {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .total-row {
+      border-top: 1px solid #e5e7eb;
+      margin-top: 14px;
+      padding-top: 14px;
+    }
+
+    .total-label {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .total-price {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .billing {
+      margin-top: 24px;
+    }
+
+    .billing-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: #111827;
+    }
+
+    .payment-title {
+      margin-top: 22px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    #payment-element {
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px;
+      border: 0;
+      border-radius: 11px;
+      background: #111827;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.94;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #payment-message {
+      display: none;
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .secure {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .rating {
+      text-align: center;
+      margin-top: 13px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .stars {
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .legal {
+      margin-top: 18px;
+      padding-top: 13px;
+      border-top: 1px solid #eeeeee;
+      font-size: 10px;
+      line-height: 1.45;
+      color: #6b7280;
+    }
+
+    .legal strong {
+      color: #4b5563;
+    }
+
+    .cancel {
+      margin-top: 8px;
+      font-size: 10px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .card {
+        padding: 20px 17px;
+        border-radius: 15px;
+      }
+
+      .title {
+        font-size: 21px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+<div class="header">
+  <div class="logo">MySafeHaven</div>
+
+  <div class="title">
+    Completa il tuo ordine
+  </div>
+
+  <div class="subtitle">
+    Accesso completo al piano di preparazione domestica.
+  </div>
+</div>
+
+<div class="section-title">
+  Riepilogo ordine
+</div>
+
+<div class="order-box">
+
+  <div class="row">
+    <span>Subtotale</span>
+    <span class="old-price">1,73 €</span>
+  </div>
+
+  <div class="row">
+    <span>Sconto</span>
+    <span class="discount">
+      60% di sconto oggi
+    </span>
+  </div>
+
+  <div class="row">
+    <span></span>
+    <span class="discount">
+      − 1,03 €
+    </span>
+  </div>
+
+  <div class="row total-row">
+    <span class="total-label">
+      Paga ora:
+    </span>
+
+    <span class="total-price">
+      0,69 €
+    </span>
+  </div>
+
+</div>
+
+<div class="billing">
+
+  <div class="billing-title">
+    Informazioni di fatturazione
+  </div>
+
+  <input
+    type="email"
+    id="email"
+    placeholder="La tua email"
+    autocomplete="email"
+    required
+  >
+
+</div>
+
+<div class="payment-title">
+  Pagamento
+</div>
+
+<div id="payment-element"></div>
+
+<div id="payment-message"></div>
+
+<button id="payBtn" type="button">
+  Conferma pagamento · 0,69 €
+</button>
+
+<div class="secure">
+  🔒 Pagamento sicuro e crittografato
+</div>
+
+<div class="rating">
+  <div class="stars">★★★★★</div>
+  4,6 / 5
+</div>
+
+<div class="legal">
+
+  Procedendo, accetti i
+  <strong>Termini e Condizioni</strong>
+  e l'<strong>Informativa sulla privacy</strong>.
+
+  Il pagamento di oggi è di 0,69€.
+  Dopo una prova di 7 giorni, il tuo abbonamento
+  si rinnoverà automaticamente a
+  35€ al mese, fino alla cancellazione.
+
+  <div class="cancel">
+    Per richiedere la cancellazione del tuo abbonamento,
+    contatta l'assistenza.
+  </div>
+
+</div>
+
+  </div>
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const btn = document.getElementById("payBtn");
+  const emailInput = document.getElementById("email");
+  const message = document.getElementById("payment-message");
+
+  if (!btn || !emailInput) {
+    console.error("CHECKOUT ERROR: elementi mancanti");
+    return;
+  }
+
+  let stripe;
+  let elements;
+  let paymentElement;
+
+  let clientSecret = null;
+  let customerId = null;
+  let paymentIntentId = null;
+  let paymentReady = false;
+  let creatingPayment = false;
+
+  function showError(text) {
+    message.innerText = text;
+    message.style.display = "block";
+  }
+
+  function hideError() {
+    message.style.display = "none";
+  }
+
+  try {
+
+    /* =========================================
+       STRIPE PUBLIC KEY
+    ========================================= */
+
+    const configResponse =
+      await fetch("/api/stripe-config");
+
+    if (!configResponse.ok) {
+      throw new Error(
+        "Impossibile recuperare la configurazione Stripe."
+      );
+    }
+
+    const config =
+      await configResponse.json();
+
+    if (!config.publishableKey) {
+      throw new Error(
+        "Stripe publishable key mancante."
+      );
+    }
+
+    stripe = Stripe(config.publishableKey);
+
+    /* =========================================
+       CREA PAYMENT INTENT
+       0,69 €
+    ========================================= */
+
+    async function initializePayment() {
+
+      if (creatingPayment || paymentReady) {
+        return;
+      }
+
+      const email =
+        emailInput.value.trim();
+
+      if (!email) {
+        return;
+      }
+
+      creatingPayment = true;
+
+      try {
+
+        const variant =
+          localStorage.getItem("abVariant") || "A";
+
+        const score =
+          localStorage.getItem("riskScore") || "50";
+
+        const response =
+          await fetch(
+            "/create-initial-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: JSON.stringify({
+                email,
+                variant,
+                score
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            "Errore nella creazione del pagamento."
+          );
+        }
+
+        clientSecret =
+          data.clientSecret;
+
+        customerId =
+          data.customerId;
+
+        paymentIntentId =
+          data.paymentIntentId;
+
+        /* =====================================
+           CREA PAYMENT ELEMENT
+        ===================================== */
+
+        elements =
+          stripe.elements({
+            clientSecret: clientSecret
+          });
+
+        paymentElement =
+          elements.create("payment");
+
+        paymentElement.mount(
+          "#payment-element"
+        );
+
+        paymentReady = true;
+
+        btn.innerText =
+          "Paga 0,69 €";
+
+      } catch (error) {
+
+        console.error(
+          "PAYMENT INIT ERROR:",
+          error
+        );
+
+        showError(
+          error.message ||
+          "Impossibile inizializzare il pagamento."
+        );
+
+      } finally {
+
+        creatingPayment = false;
+
+      }
+    }
+
+    /* =========================================
+       EMAIL
+    ========================================= */
+
+    emailInput.addEventListener(
+      "input",
+      () => {
+        hideError();
+        paymentReady = false;
+      }
+    );
+
+    emailInput.addEventListener(
+      "change",
+      () => {
+        hideError();
+        initializePayment();
+      }
+    );
+
+    emailInput.addEventListener(
+      "blur",
+      () => {
+        initializePayment();
+      }
+    );
+
+    /* =========================================
+       RECUPERA EMAIL SALVATA
+    ========================================= */
+
+    const savedEmail =
+      localStorage.getItem("email");
+
+    if (
+      !emailInput.value &&
+      savedEmail
+    ) {
+      emailInput.value =
+        savedEmail;
+    }
+
+    /* =========================================
+       INIZIALIZZA AUTOMATICAMENTE
+    ========================================= */
+
+    if (emailInput.value.trim()) {
+      await initializePayment();
+    }
+
+    /* =========================================
+       PAGAMENTO
+    ========================================= */
+
+    btn.addEventListener(
+      "click",
+      async (event) => {
+
+        event.preventDefault();
+
+        hideError();
+
+        const email =
+          emailInput.value.trim();
+
+        if (!email) {
+
+          showError(
+            "Inserisci la tua email."
+          );
+
+          emailInput.focus();
+
+          return;
+        }
+
+        /* Se il Payment Element non è ancora pronto,
+           lo inizializziamo */
+
+        if (!paymentReady) {
+
+          btn.innerText =
+            "Preparazione...";
+
+          btn.disabled = true;
+
+          try {
+
+            await initializePayment();
+
+          } finally {
+
+            btn.disabled = false;
+
+          }
+
+          if (!paymentReady) {
+            return;
+          }
+        }
+
+        btn.disabled = true;
+
+        btn.innerText =
+          "Elaborazione...";
+
+        try {
+
+          /* =====================================
+             CONFERMA PAGAMENTO 0,69 €
+          ===================================== */
+
+          const result =
+            await stripe.confirmPayment({
+              elements,
+
+              confirmParams: {
+                return_url:
+                  window.location.origin +
+                  "/success.html"
+              },
+
+              redirect: "if_required"
+            });
+
+          if (result.error) {
+
+            showError(
+              result.error.message ||
+              "Il pagamento non è riuscito."
+            );
+
+            btn.disabled = false;
+
+            btn.innerText =
+              "Paga 0,69 €";
+
+            return;
+          }
+
+          /* =====================================
+             CREA ABBONAMENTO
+             7 GIORNI GRATIS
+             POI 35 €/MESE
+          ===================================== */
+
+          const subscriptionResponse =
+            await fetch(
+              "/create-subscription",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                  customerId,
+                  paymentIntentId,
+                  email,
+
+                  variant:
+                    localStorage.getItem(
+                      "abVariant"
+                    ) || "A",
+
+                  score:
+                    localStorage.getItem(
+                      "riskScore"
+                    ) || "50"
+                })
+              }
+            );
+
+          const subscriptionData =
+            await subscriptionResponse.json();
+
+          if (!subscriptionResponse.ok) {
+
+            throw new Error(
+              subscriptionData.error ||
+              "Impossibile creare l'abbonamento."
+            );
+          }
+
+          /* =====================================
+             SALVA EMAIL
+          ===================================== */
+
+          localStorage.setItem(
+            "email",
+            email
+          );
+
+          /* =====================================
+             SUCCESSO
+          ===================================== */
+
+          window.location.href =
+            "/success.html";
+
+        } catch (error) {
+
+          console.error(
+            "PAYMENT ERROR:",
+            error
+          );
+
+          showError(
+            error.message ||
+            "Pagamento non riuscito. Riprova."
+          );
+
+          btn.disabled = false;
+
+          btn.innerText =
+            "Paga 0,69 €";
+        }
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "STRIPE INIT ERROR:",
+      error
+    );
+
+    showError(
+      error.message ||
+      "Impossibile inizializzare il pagamento."
+    );
+  }
+
+});
+
+</script>
+
+</body>
+</html>

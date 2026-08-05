@@ -1,0 +1,190 @@
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: radial-gradient(circle at top, #0b1220, #020617);
+  color: white;
+}
+
+.container {
+  width: 92%;
+  max-width: 720px;
+  padding: 40px;
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  text-align: center;
+}
+
+/* SCREEN SYSTEM */
+.screen {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TITLE */
+h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 14px 18px;
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  color: #0b1220;
+
+  font-weight: 800;
+  font-size: 14px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* OPTIONS = CARD STYLE */
+#options button {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  font-weight: 600;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+#options button:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* SCORE CARD */
+.score-circle {
+  width: 180px;
+  height: 180px;
+  margin: 30px auto;
+
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: radial-gradient(circle, #0b1220, #020617);
+  border: 2px solid rgba(56, 189, 248, 0.6);
+
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
+}
+
+.score {
+  font-size: 44px;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+/* CARDS (RESULTS) */
+.card {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 14px;
+  border-radius: 14px;
+  margin-top: 12px;
+  text-align: left;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* PROGRESS */
+.progress {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #22c55e, #38bdf8);
+  transition: width 0.3s ease;
+}
+
+/* TEXT */
+p {
+  opacity: 0.7;
+  font-size: 14px;
+} .saas {
+  display: flex;
+  height: 100vh;
+  font-family: Arial;
+}
+
+.sidebar {
+  width: 220px;
+  background: #111;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar button {
+  background: none;
+  color: white;
+  border: none;
+  text-align: left;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background: #222;
+}
+
+.main {
+  flex: 1;
+  padding: 30px;
+  background: #f5f5f5;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+}

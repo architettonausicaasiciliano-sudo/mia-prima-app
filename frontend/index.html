@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MySafeHaven - Preparedness Assessment</title>
+  <title>MySafeHaven</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,18 +16,13 @@
   <div id="landing" class="screen active">
     <h1>72h Household Resilience Check</h1>
 
-    <p>
-      Understand your vulnerability in a major disruption
-      and get a personalized action plan.
-    </p>
+    <p>Understand your vulnerability in a major disruption.</p>
 
-    <!-- NO INLINE ONCLICK (IMPORTANT) -->
     <button id="startBtn">Start Assessment</button>
   </div>
 
   <!-- QUIZ -->
   <div id="quiz" class="screen">
-
     <h2 id="question"></h2>
 
     <div id="options"></div>
@@ -36,16 +31,13 @@
       <div id="progressBar"></div>
     </div>
 
-    <p>
-      Step <span id="currentStep">1</span> / 4
-    </p>
-
+    <p>Step <span id="currentStep">1</span></p>
   </div>
 
   <!-- RESULT -->
   <div id="result" class="screen">
 
-    <h1>Your Resilience Score</h1>
+    <h1>Your Score</h1>
 
     <div class="score-circle">
       <div class="score" id="score">0%</div>
@@ -54,16 +46,10 @@
     <div id="breakdown"></div>
     <div id="plan"></div>
 
+    <!-- PAYWALL -->
     <div class="paywall">
-      <h3>🚨 Full 7-Day Emergency Plan Locked</h3>
-
-      <p>
-        Unlock your full personalized preparedness roadmap.
-      </p>
-
-      <button id="unlockBtn" class="cta">
-        Unlock Full Plan
-      </button>
+      <h3>Unlock Full Plan</h3>
+      <button id="unlockBtn">Unlock</button>
     </div>
 
     <button id="restartBtn">Restart</button>
@@ -72,8 +58,7 @@
 
 </div>
 
-<!-- ONLY YOUR APP -->
-<script src="app.js?v=3"></script>
+<script type="module" src="app.js"></script>
 
 </body>
 </html>
